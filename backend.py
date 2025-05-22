@@ -17,7 +17,7 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 
 # Flask Setup
-app = Flask(__name__, static_folder='static', template_folder='templates')
+app = Flask(__name__, static_folder='frontend', template_folder='templates')
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500"])
 app.secret_key = 'hA@!Y7is#sdf%dfdLS4!'  # Replace with a strong secret key
 
@@ -79,7 +79,7 @@ COMMODITY_PRICE_RANGES = {
 # Home Route (Serving HTML Page)
 @app.route('/')
 def index():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('frontend', 'index.html')
 
 # Prediction Routes
 def generate_weekly_predictions(commodity_name, num_weeks=10):
