@@ -38,6 +38,15 @@ df_hist['Arrival_Date'] = pd.to_datetime(df_hist['Arrival_Date'])
 df_hist['Year'] = df_hist['Arrival_Date'].dt.year
 df_hist['Month'] = df_hist['Arrival_Date'].dt.month
 
+# Get the base URL for the app
+def get_base_url():
+    if os.environ.get('RENDER'):
+        # On Render, use the service URL
+        return os.environ.get('RENDER_EXTERNAL_URL', 'https://your-app-name.onrender.com')
+    else:
+        # Local development
+        return 'http://127.0.0.1:5000'
+
 # Commodity-specific price ranges
 COMMODITY_PRICE_RANGES = {
 # Vegetables
@@ -235,7 +244,9 @@ def update_graphs(selected_commodity, selected_district):
     filtered_df = df_hist[(df_hist['Commodity'] == selected_commodity) & (df_hist['District'] == selected_district)]
 
     try:
-        response = requests.get(f'http://127.0.0.1:5000/predict/{selected_commodity}')
+        # Use dynamic base URL instead of hardcoded localhost
+        base_url = get_base_url()
+        response = requests.get(f'{base_url}/predict/{selected_commodity}')
         predicted_data = response.json()['weekly_predictions']
         df_pred = pd.DataFrame(predicted_data)
         df_pred['Date'] = pd.to_datetime(df_pred['Date'])
