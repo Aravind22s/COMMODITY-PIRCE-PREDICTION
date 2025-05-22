@@ -17,7 +17,7 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 
 # Flask Setup
-app = Flask(__name__, static_folder='frontend', template_folder='templates')
+app = Flask(__name__, static_folder='frontend', static_url_path='', template_folder='templates')
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500"])
 app.secret_key = 'hA@!Y7is#sdf%dfdLS4!'  # Replace with a strong secret key
 
@@ -80,6 +80,15 @@ COMMODITY_PRICE_RANGES = {
 @app.route('/')
 def index():
     return send_from_directory('frontend', 'index.html')
+
+# Serve static files (CSS, JS, images, etc.)
+@app.route('/<path:filename>')
+def serve_static_files(filename):
+    try:
+        return send_from_directory('frontend', filename)
+    except:
+        # If file not found in frontend, try to serve from Flask's default static handling
+        return app.send_static_file(filename)
 
 # Prediction Routes
 def generate_weekly_predictions(commodity_name, num_weeks=10):
