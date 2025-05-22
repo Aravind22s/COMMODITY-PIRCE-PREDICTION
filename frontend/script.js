@@ -2,6 +2,9 @@
 let isLoggedIn = false; // Track login state
 let predictionChartInstance; // Store chart instance for updates
 
+// Get the base URL dynamically (works for both local development and deployment)
+const BASE_URL = window.location.origin;
+
 // Tab navigation functions
 function openTab(event, tabId) {
     // Uncomment the following code if you want to restrict access to logged-in users only
@@ -47,7 +50,7 @@ function openDashboard() {
     //     alert("Please log in to access the dashboard.");
     //     return;
     // }
-    window.open("http://127.0.0.1:5000/dashboard/", "_blank");  // opens DASHBOARD in new tab
+    window.open(`${BASE_URL}/dashboard/`, "_blank");  // opens DASHBOARD in new tab
 }
 
 // Update username display in account menu
@@ -114,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch("http://127.0.0.1:5000/predict", {
+        // Use relative URL instead of hardcoded localhost
+        fetch("/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: 'include',
@@ -231,7 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const endpoint = isSignup ? "signup" : "login";
 
-        fetch(`http://127.0.0.1:5000/${endpoint}`, {
+        // Use relative URL instead of hardcoded localhost
+        fetch(`/${endpoint}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: 'include',
