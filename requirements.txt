@@ -10,4 +10,3 @@ numpy
 scikit-learn
 xgboost
 requests
-pickle
